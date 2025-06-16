@@ -7,6 +7,7 @@ use App\Core\Jwt;
 class AuthController {
     public function login() {
         $data = json_decode(file_get_contents('php://input'), true);
+        $data['role_id'] = 3;
         $userModel = new Utilisateur();
         if (!$data || !isset($data['email']) || !isset($data['mot_de_passe'])) {
             http_response_code(400);
