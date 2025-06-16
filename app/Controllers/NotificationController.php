@@ -6,6 +6,7 @@ use App\Models\Notification;
 class NotificationController {
     public function create() {
         $data = json_decode(file_get_contents('php://input'), true);
+        $data['role_id'] = 3;
         $model = new Notification();
         $success = $model->add($data['utilisateur_id'], $data['jpo_id'], $data['type']);
         echo json_encode(['success' => $success]);
