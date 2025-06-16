@@ -26,5 +26,16 @@ class Utilisateur extends Model {
         $stmt = $this->pdo->query("SELECT * FROM utilisateur");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function delete($id) {
+    $stmt = $this->pdo->prepare("DELETE FROM utilisateur WHERE id = ?");
+    return $stmt->execute([$id]);
+    }
+
+    public function updateRole($id, $role_id) {
+    $stmt = $this->pdo->prepare("UPDATE utilisateur SET role_id = ? WHERE id = ?");
+    return $stmt->execute([$role_id, $id]);
+    }
+    
 }
 ?>
