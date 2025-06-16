@@ -19,5 +19,12 @@ class Inscription extends Model {
         $stmt->execute([$jpo_id]);
         return (int)$stmt->fetchColumn();
     }
+
+    public function isInscrit($utilisateur_id, $jpo_id) {
+    $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM inscription WHERE utilisateur_id = ? AND jpo_id = ?");
+    $stmt->execute([$utilisateur_id, $jpo_id]);
+    return $stmt->fetchColumn() > 0;
+}
+
 }
 ?>
