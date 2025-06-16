@@ -19,5 +19,11 @@ class Jpo extends Model {
         $stmt = $this->pdo->prepare("INSERT INTO jpo (titre, description, date_jpo, capacite, etablissement_id) VALUES (?, ?, ?, ?, ?)");
         return $stmt->execute([$titre, $description, $date_jpo, $capacite, $etablissement_id]);
     }
+
+    public function delete($id) {
+    $stmt = $this->pdo->prepare("DELETE FROM jpo WHERE id = ?");
+    return $stmt->execute([$id]);
+}
+
 }
 ?>
