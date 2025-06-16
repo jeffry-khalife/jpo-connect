@@ -4,6 +4,7 @@ return [
     'db_name' => 'jpo',
     'db_user' => 'root',
     'db_pass' => '',
+    'jwt_secret' => 'azertyuiop',
 ];
 
 ?>
