@@ -14,5 +14,10 @@ class Commentaire extends Model {
         $stmt = $this->pdo->prepare("INSERT INTO commentaire (utilisateur_id, jpo_id, contenu, parent_id) VALUES (?, ?, ?, ?)");
         return $stmt->execute([$utilisateur_id, $jpo_id, $contenu, $parent_id]);
     }
+
+    public function delete($id) {
+    $stmt = $this->pdo->prepare("DELETE FROM commentaire WHERE id = ?");
+    return $stmt->execute([$id]);
+}
 }
 ?>
