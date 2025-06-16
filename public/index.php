@@ -4,7 +4,6 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -22,6 +21,8 @@ use App\Controllers\EtablissementController;
 use App\Controllers\RoleController;
 use App\Controllers\NotificationController;
 
+use App\Core\Database;
+
 $router = new Router();
 
 $router->add('POST', '/login', function() {
@@ -38,7 +39,6 @@ $router->add('POST', '/jpos', function() {
     (new JpoController())->create();
 });
 
-
 $router->add('GET', '/utilisateurs', function() { (new UtilisateurController())->index(); });
 $router->add('GET', '/utilisateurs/(\d+)', function($id) { (new UtilisateurController())->show($id); });
 $router->add('POST', '/utilisateurs', function() { (new UtilisateurController())->create(); });
@@ -47,19 +47,41 @@ $router->add('DELETE', '/utilisateurs/(\d+)', function($id) { (new UtilisateurCo
 $router->add('POST', '/inscriptions', function() { (new InscriptionController())->inscrire(); });
 $router->add('DELETE', '/inscriptions', function() { (new InscriptionController())->desinscrire(); });
 $router->add('GET', '/inscriptions/count/(\d+)', function($jpo_id) { (new InscriptionController())->count($jpo_id); });
+$router->add('GET', '/inscriptions/check', function() { (new InscriptionController())->check(); });
+$router->add('DELETE', '/jpos/(\d+)', function($id) { (new JpoController())->delete($id); });
+$router->add('PUT', '/jpos/(\d+)', function($id) { (new JpoController())->update($id); });
+
 
 $router->add('GET', '/commentaires/(\d+)', function($jpo_id) { (new CommentaireController())->index($jpo_id); });
 $router->add('POST', '/commentaires', function() { (new CommentaireController())->create(); });
 $router->add('DELETE', '/commentaires/(\d+)', function($id) { (new CommentaireController())->delete($id); });
 
-
 $router->add('GET', '/etablissements', function() { (new EtablissementController())->index(); });
 $router->add('GET', '/etablissements/(\d+)', function($id) { (new EtablissementController())->show($id); });
 
 $router->add('GET', '/roles', function() { (new RoleController())->index(); });
-
+$router->add('PUT', '/utilisateurs/(\d+)/role', function($id) { (new UtilisateurController())->updateRole($id); });
 
 $router->add('POST', '/notifications', function() { (new NotificationController())->create(); });
+
+
+$router->add('GET', '/stats', function() {
+    $db = \App\Core\Database::getInstance();
+    $inscrits = $db->query("SELECT COUNT(*) FROM inscription")->fetchColumn();
+    $presents = $db->query("SELECT COUNT(*) FROM inscription WHERE present = 1")->fetchColumn();
+    echo json_encode(['inscrits_total' => (int)$inscrits, 'presents_total' => (int)$presents]);
+});
+
+$router->add('GET', '/commentaires/moderation', function() {
+    $db = \App\Core\Database::getInstance();
+    $comments = $db->query(
+        "SELECT c.*, u.nom, u.prenom 
+         FROM commentaire c 
+         JOIN utilisateur u ON c.utilisateur_id = u.id 
+         ORDER BY date_commentaire DESC"
+    )->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($comments);
+});
 
 $router->add('GET', '/', function() {
     echo json_encode(['message' => 'API JPO Connect opérationnelle']);
