@@ -23,15 +23,41 @@ class UtilisateurController {
 
     public function create() {
         $data = json_decode(file_get_contents('php://input'), true);
+        $data['role_id'] = 3;
         $model = new Utilisateur();
         $success = $model->create($data['nom'], $data['prenom'], $data['email'], $data['mot_de_passe'], $data['role_id']);
         echo json_encode(['success' => $success]);
     }
 
     public function delete($id) {
-        $model = new Utilisateur();
-        $success = $model->delete($id);
-        echo json_encode(['success' => $success]);
+    $model = new Utilisateur();
+    $success = $model->delete($id);
+    if ($success) {
+        http_response_code(200);
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => "Suppression impossible"]);
     }
+    }
+
+    public function updateRole($id) {
+    $data = json_decode(file_get_contents('php://input'), true);
+    if (!isset($data['role_id'])) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'role_id manquant']);
+        return;
+    }
+    $model = new Utilisateur();
+    $success = $model->updateRole($id, $data['role_id']);
+    if ($success) {
+        http_response_code(200);
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => "Changement impossible"]);
+    }
+    }
+
 }
 ?>
