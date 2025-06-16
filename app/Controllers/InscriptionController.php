@@ -28,7 +28,6 @@ class InscriptionController {
 
     public function check() {
     $data = json_decode(file_get_contents('php://input'), true);
-    // Si tu utilises GET, utilise $_GET à la place
     $utilisateur_id = $data['utilisateur_id'] ?? null;
     $jpo_id = $data['jpo_id'] ?? null;
 
