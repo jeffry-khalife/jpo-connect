@@ -36,7 +36,6 @@ html, body, #root {
   background: var(--primary-color);
   padding: 0.8rem 0;
   box-shadow: 0 2px 8px rgba(10,25,47,0.05);
-  position: sticky;
   top: 0;
   z-index: 10;
 }
@@ -85,7 +84,6 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Centre verticalement */
   width: 100vw;
   min-height: 0;
   background: linear-gradient(120deg, #ffffff 60%, #f4f6fa 100%);
@@ -93,8 +91,9 @@ html, body, #root {
   box-sizing: border-box;
 }
 
+
 /* BLOC PAGE */
-.container {
+/* .container {
   width: 100%;
   max-width: 520px;
   background: var(--background-color);
@@ -103,7 +102,7 @@ html, body, #root {
   box-shadow: var(--shadow);
   margin: 2rem auto;
   text-align: center;
-}
+} */
 
 h1, h2, h3 {
   color: var(--heading-color);
